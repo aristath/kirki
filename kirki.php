@@ -20,6 +20,12 @@
  * @since     1.0
  */
 
+use Kirki\Compatibility\Init;
+use Kirki\L10n;
+use Kirki\Compatibility\Modules;
+use Kirki\Compatibility\Framework;
+use Kirki\Compatibility\Kirki;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,31 +36,26 @@ if ( class_exists( 'Kirki' ) ) {
 	return;
 }
 
-// Include the autoloader.
-require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'class-kirki-autoload.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-new Kirki_Autoload();
-
 if ( ! defined( 'KIRKI_PLUGIN_FILE' ) ) {
 	define( 'KIRKI_PLUGIN_FILE', __FILE__ );
 }
+
+require_once __DIR__ . '/lib/class-aricolor.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/lib/class-kirki-color.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/packages/autoload.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+require_once __DIR__ . '/inc/bootstrap.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
 
 // Define the KIRKI_VERSION constant.
 if ( ! defined( 'KIRKI_VERSION' ) ) {
 	define( 'KIRKI_VERSION', '3.0.45' );
 }
 
-// Make sure the path is properly set.
-Kirki::$path = wp_normalize_path( dirname( __FILE__ ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
-Kirki_Init::set_url();
-
-new Kirki_Controls();
-
 if ( ! function_exists( 'Kirki' ) ) {
 	/**
 	 * Returns an instance of the Kirki object.
 	 */
 	function kirki() {
-		$kirki = Kirki_Toolkit::get_instance();
+		$kirki = Framework::get_instance();
 		return $kirki;
 	}
 }
@@ -64,16 +65,11 @@ global $kirki;
 $kirki = kirki();
 
 // Instantiate the modules.
-$kirki->modules = new Kirki_Modules();
-
-Kirki::$url = plugins_url( '', __FILE__ );
+$kirki->modules = new Modules();
 
 // Instantiate classes.
 new Kirki();
-new Kirki_L10n();
-
-// Include deprecated functions & methods.
-require_once wp_normalize_path( dirname( __FILE__ ) . '/deprecated/deprecated.php' ); // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
+new L10n( 'kirki', __DIR__ . '/languages' );
 
 // Include the ariColor library.
 require_once wp_normalize_path( dirname( __FILE__ ) . '/lib/class-aricolor.php' ); // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
