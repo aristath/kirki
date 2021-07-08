@@ -181,7 +181,7 @@ class Kirki_Fonts_Downloader {
 			 * The default user-agent is the only one compatible with woff (not woff2)
 			 * which also supports unicode ranges.
 			 */
-			$user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8';
+			$user_agent = 'Mozilla/5.0 (X11; Linux i686; rv:21.0) Gecko/20100101 Firefox/21.0';
 		}
 
 		// Get the response.
@@ -280,6 +280,7 @@ class Kirki_Fonts_Downloader {
 			if ( ! function_exists( 'WP_Filesystem' ) ) {
 				require_once wp_normalize_path( ABSPATH . '/wp-admin/includes/file.php' );
 			}
+			Kirki_Helper::init_filesystem();
 			WP_Filesystem();
 		}
 		return $wp_filesystem;
